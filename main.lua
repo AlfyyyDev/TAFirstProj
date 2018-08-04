@@ -3,6 +3,7 @@
 function love.load()
   fontmain = love.graphics.newFont("goodtimesfont.ttf", 50)
   fontplayernums =  love.graphics.newFont("goodtimesfont.ttf", 90)
+  fontsmall = love.graphics.newFont("goodtimesfont.ttf", 45)
   love.graphics.setFont(fontmain)
   love.window.setTitle("Number Game")
   love.window.setMode(1024,768)
@@ -17,7 +18,8 @@ function love.load()
   round = 1
   p1score = 0
   p2score = 0
-  colorScale = 0
+  p1colorScale = 0
+  p1colorScale = 0
   quitGame = false
   test = "nothing"
   gameStart = false
@@ -70,17 +72,18 @@ end
 function love.draw()
     if gameStart == true then
       ROUND_STRING = "Round " .. round
-      ROUND = "Round "
-      SCORE = "Score "
+      ROUND = "Round " .. round
       P1SCORE_STRING = "Score " .. p1score
       P2SCORE_STRING = "Score " .. p2score
+      P1_STRING = "Player One"
+      P2_STRING = "Player Two"
       love.graphics.setFont(fontmain)
       love.graphics.setColor(1, 1, 1)
       love.graphics.print(ROUND_STRING, textXLoc(1, 1, ROUND), textYLoc(14, 2, ROUND)) --round counter
-      love.graphics.print('Player One', 300, 100) --selected  player 1
-      love.graphics.print('Player Two', 500, 100) --selected player 2
-      love.graphics.print(P1SCORE_STRING, textXLoc(3, 1, SCORE), textYLoc(5, 2, SCORE)) --player 1 score
-      love.graphics.print(P2SCORE_STRING, textXLoc(3, 3, SCORE), textYLoc(5, 2, SCORE)) --player 2 score
+      love.graphics.print(P1_STRING, textXLoc(3, 1, P1_STRING), textYLoc(3, 1, P1_STRING)) --selected  player 1
+      love.graphics.print(P2_STRING, textXLoc(3, 3, P2_STRING), textYLoc(3, 1, P2_STRING)) --selected player 2
+      love.graphics.print(P1SCORE_STRING, textXLoc(3, 1, P1SCORE_STRING), textYLoc(5, 2, P1SCORE_STRING)) --player 1 score
+      love.graphics.print(P2SCORE_STRING, textXLoc(3, 3, P2SCORE_STRING), textYLoc(5, 2, P2SCORE_STRING)) --player 2 score
 
       love.graphics.setColor(1,1,1)
 
@@ -91,31 +94,59 @@ function love.draw()
 
       love.graphics.rectangle("fill", RECT_ONE_X,
         shapeYLoc(1, 1, windowHeight/4), getFontWidth(RECT_WIDTH) + 115, windowHeight/4, 20, 20, 10000)
+      love.graphics.rectangle("line", RECT_ONE_X,
+        shapeYLoc(1, 1, windowHeight/4), getFontWidth(RECT_WIDTH) + 115, windowHeight/4, 20, 20, 10000)
       love.graphics.setColor(1,0.6,0.2)
       --left box 1
       love.graphics.rectangle("fill", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105), shapeYLoc(1, 1, (windowHeight/4) - 10),
-       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+        INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+      love.graphics.rectangle("line", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105), shapeYLoc(1, 1, (windowHeight/4) - 10),
+        INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
       --middle box 1
       love.graphics.rectangle("fill", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105) + INNER_RECT_WIDTH, shapeYLoc(1, 1, (windowHeight/4) - 10),
-       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+        INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+      love.graphics.rectangle("line", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105) + INNER_RECT_WIDTH, shapeYLoc(1, 1, (windowHeight/4) - 10),
+        INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
       --right box 1
-      love.graphics.rectangle("fill", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105)  + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, (windowHeight/4) - 10),
-       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+      love.graphics.rectangle("fill", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105) + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, (windowHeight/4) - 10),
+        INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+      love.graphics.rectangle("line", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105) + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, (windowHeight/4) - 10),
+        INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
 
 
+
+      love.graphics.setFont(fontmain)
       love.graphics.setColor(1,1,1)
       love.graphics.rectangle("fill", RECT_TWO_X,
+        shapeYLoc(1, 1, windowHeight/4), getFontWidth(RECT_WIDTH) + 115, windowHeight/4, 20, 20, 10000)
+      love.graphics.rectangle("line", RECT_TWO_X,
         shapeYLoc(1, 1, windowHeight/4), getFontWidth(RECT_WIDTH) + 115, windowHeight/4, 20, 20, 10000)
       love.graphics.setColor(1,0.6,0.2)
       --left box 2
       love.graphics.rectangle("fill", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105), shapeYLoc(1, 1, (windowHeight/4) - 10),
-       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+        INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+      love.graphics.rectangle("line", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105), shapeYLoc(1, 1, (windowHeight/4) - 10),
+        INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
       --middle box 2
       love.graphics.rectangle("fill", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105)  + INNER_RECT_WIDTH, shapeYLoc(1, 1, (windowHeight/4) - 10),
-       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+        INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+      love.graphics.rectangle("line", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105)  + INNER_RECT_WIDTH, shapeYLoc(1, 1, (windowHeight/4) - 10),
+        INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
       --right box 2
       love.graphics.rectangle("fill", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105)  + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, (windowHeight/4) - 10),
-       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+        INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+      love.graphics.rectangle("line", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105)  + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, (windowHeight/4) - 10),
+        INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+
+      love.graphics.setColor(1,1,1)
+      love.graphics.setFont(fontsmall)
+      FONT_WIDTH = '1000 100 10'
+      love.graphics.print('1000', shapeXLoc(3,1, getFontWidth(FONT_WIDTH) + 125), shapeYLoc(1, 1, getFontHeight('1000')))
+      love.graphics.print('100', shapeXLoc(3,1, getFontWidth(FONT_WIDTH) + 125) + INNER_RECT_WIDTH + 20, shapeYLoc(1, 1, getFontHeight('1000')))
+      love.graphics.print('10', shapeXLoc(3,1, getFontWidth(FONT_WIDTH) + 125) + (INNER_RECT_WIDTH * 2) + 35, shapeYLoc(1, 1, getFontHeight('1000')))
+      love.graphics.print('1000', shapeXLoc(3,3, getFontWidth(FONT_WIDTH) + 125), shapeYLoc(1, 1, getFontHeight('1000')))
+      love.graphics.print('100', shapeXLoc(3,3, getFontWidth(FONT_WIDTH) + 125) + INNER_RECT_WIDTH + 20, shapeYLoc(1, 1, getFontHeight('1000')))
+      love.graphics.print('10', shapeXLoc(3,3, getFontWidth(FONT_WIDTH) + 125) + (INNER_RECT_WIDTH * 2) + 35, shapeYLoc(1, 1, getFontHeight('1000')))
 
       love.graphics.setColor(0,0,0)
        if incrementP1 == 1 then
@@ -317,7 +348,7 @@ function hotcold()
   p1dist = math.abs(targetNum - p1Num)
   p2dist = math.abs(targetNum - p2Num)
 
-  if p1dist <= 10000 and p1dist > 7500 then
+--[[  if p1dist <= 10000 and p1dist > 7500 then
     p1TempColor = {0.3,0.2,1}
   elseif p1dist <= 7500 and p1dist > 5000 then
     p1TempColor = {0.3,1,0.8}
@@ -339,7 +370,7 @@ function hotcold()
     p1TempColor = {0.4,1,0.1}
   end
 
---[[  if p2dist <= 10000 and p2dist > 7500 then
+  if p2dist <= 10000 and p2dist > 7500 then
     p2TempColor = {0.3,0.2,1}
   elseif p2dist <= 7500 and p2dist > 5000 then
     p2TempColor = {0.3,1,0.8}
@@ -361,18 +392,32 @@ function hotcold()
     p2TempColor = {0.4,1,0.1}
   end]]
 
+  if p1dist > 5250 then
+    p1colorScale = 0
+    p1TempColor = {p1colorScale, 0, 0}
+  elseif p1dist <= 5250 and p1dist > 5000 then
+    p1colorScale = (5250 - p1dist)/250
+    p1TempColor = {p1colorScale, 0, 0}
+  elseif p1dist <= 5000 and p1dist > 500 then
+    p1colorScale = (5000 - p1dist)/4500
+    p1TempColor = {1, p1colorScale, 0}
+  elseif p1dist <= 500 and p1dist > 0 then
+    p1colorScale = p1dist/500
+    p1TempColor = {p1colorScale, 1, 0}
+  end
+
   if p2dist > 5250 then
-    colorScale = 0
-    p2TempColor = {colorScale, 0, 0}
+    p2colorScale = 0
+    p2TempColor = {p2colorScale, 0, 0}
   elseif p2dist <= 5250 and p2dist > 5000 then
-    colorScale = (5250 - p2dist)/250
-    p2TempColor = {colorScale, 0, 0}
+    p2colorScale = (5250 - p2dist)/250
+    p2TempColor = {p2colorScale, 0, 0}
   elseif p2dist <= 5000 and p2dist > 500 then
-    colorScale = (5000 - p2dist)/4500
-    p2TempColor = {1, colorScale, 0}
+    p2colorScale = (5000 - p2dist)/4500
+    p2TempColor = {1, p2colorScale, 0}
   elseif p2dist <= 500 and p2dist > 0 then
-    colorScale = p2dist/500
-    p2TempColor = {colorScale, 1, 0}
+    p2colorScale = p2dist/500
+    p2TempColor = {p2colorScale, 1, 0}
   end
 end
 
@@ -415,6 +460,10 @@ end
 
 function getFontWidth(text)
   return love.graphics.getFont():getWidth(text)
+end
+
+function getFontHeight(text)
+  return love.graphics.getFont():getHeight(text)
 end
 
 
