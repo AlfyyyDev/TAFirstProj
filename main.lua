@@ -7,7 +7,7 @@ function love.load()
   love.window.setTitle("Number Game")
   love.window.setMode(1024,768)
   love.graphics.setColor(0,0,0)
-  love.graphics.setBackgroundColor(1,0.4,0)
+  love.graphics.setBackgroundColor(1,0.6,0.2)
   windowWidth, windowHeight = love.window.getMode()
   incrementP1 = 2
   incrementP2 = 2
@@ -17,6 +17,7 @@ function love.load()
   round = 1
   p1score = 0
   p2score = 0
+  colorScale = 0
   quitGame = false
   test = "nothing"
   gameStart = false
@@ -81,18 +82,40 @@ function love.draw()
       love.graphics.print(P1SCORE_STRING, textXLoc(3, 1, SCORE), textYLoc(5, 2, SCORE)) --player 1 score
       love.graphics.print(P2SCORE_STRING, textXLoc(3, 3, SCORE), textYLoc(5, 2, SCORE)) --player 2 score
 
-
       love.graphics.setColor(1,1,1)
 
       RECT_WIDTH = '1000 100 10'
-      RECT_ONE_X = shapeXLoc(3,1, getFontWidth(RECT_WIDTH)+115)
-      RECT_TWO_X = shapeXLoc(3,3, getFontWidth(RECT_WIDTH)+115)
+      RECT_ONE_X = shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 115)
+      RECT_TWO_X = shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 115)
       INNER_RECT_WIDTH = (getFontWidth(RECT_WIDTH) + 115)/3
 
       love.graphics.rectangle("fill", RECT_ONE_X,
-       shapeYLoc(1, 1, windowHeight/4), getFontWidth(RECT_WIDTH) + 115, windowHeight/4, 20, 20, 10000)
+        shapeYLoc(1, 1, windowHeight/4), getFontWidth(RECT_WIDTH) + 115, windowHeight/4, 20, 20, 10000)
+      love.graphics.setColor(1,0.6,0.2)
+      --left box 1
+      love.graphics.rectangle("fill", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105), shapeYLoc(1, 1, (windowHeight/4) - 10),
+       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+      --middle box 1
+      love.graphics.rectangle("fill", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105) + INNER_RECT_WIDTH, shapeYLoc(1, 1, (windowHeight/4) - 10),
+       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+      --right box 1
+      love.graphics.rectangle("fill", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105)  + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, (windowHeight/4) - 10),
+       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+
+
+      love.graphics.setColor(1,1,1)
       love.graphics.rectangle("fill", RECT_TWO_X,
-       shapeYLoc(1, 1, windowHeight/4), getFontWidth(RECT_WIDTH) + 115, windowHeight/4, 20, 20, 10000)
+        shapeYLoc(1, 1, windowHeight/4), getFontWidth(RECT_WIDTH) + 115, windowHeight/4, 20, 20, 10000)
+      love.graphics.setColor(1,0.6,0.2)
+      --left box 2
+      love.graphics.rectangle("fill", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105), shapeYLoc(1, 1, (windowHeight/4) - 10),
+       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+      --middle box 2
+      love.graphics.rectangle("fill", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105)  + INNER_RECT_WIDTH, shapeYLoc(1, 1, (windowHeight/4) - 10),
+       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
+      --right box 2
+      love.graphics.rectangle("fill", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105)  + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, (windowHeight/4) - 10),
+       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
 
       love.graphics.setColor(0,0,0)
        if incrementP1 == 1 then
@@ -102,7 +125,7 @@ function love.draw()
          love.graphics.rectangle("line", RECT_ONE_X  + INNER_RECT_WIDTH, shapeYLoc(1, 1, windowHeight/4),
           INNER_RECT_WIDTH, windowHeight/4, 20, 20, 10000)
        elseif incrementP1 == 3 then
-         love.graphics.rectangle("line", RECT_ONE_X  + (INNER_RECT_WIDTH *2), shapeYLoc(1, 1, windowHeight/4),
+         love.graphics.rectangle("line", RECT_ONE_X  + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, windowHeight/4),
           INNER_RECT_WIDTH, windowHeight/4, 20, 20, 10000)
        end
 
@@ -113,7 +136,7 @@ function love.draw()
          love.graphics.rectangle("line", RECT_TWO_X  + INNER_RECT_WIDTH, shapeYLoc(1, 1, windowHeight/4),
           INNER_RECT_WIDTH, windowHeight/4, 20, 20, 10000)
        elseif incrementP2 == 3 then
-         love.graphics.rectangle("line", RECT_TWO_X  + (INNER_RECT_WIDTH *2), shapeYLoc(1, 1, windowHeight/4),
+         love.graphics.rectangle("line", RECT_TWO_X  + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, windowHeight/4),
           INNER_RECT_WIDTH, windowHeight/4, 20, 20, 10000)
        end
 
@@ -316,7 +339,7 @@ function hotcold()
     p1TempColor = {0.4,1,0.1}
   end
 
-  if p2dist <= 10000 and p2dist > 7500 then
+--[[  if p2dist <= 10000 and p2dist > 7500 then
     p2TempColor = {0.3,0.2,1}
   elseif p2dist <= 7500 and p2dist > 5000 then
     p2TempColor = {0.3,1,0.8}
@@ -336,8 +359,40 @@ function hotcold()
     p2TempColor = {0.5,0,0.1}
   elseif p2dist <= 10 and p2dist >= 0 then
     p2TempColor = {0.4,1,0.1}
+  end]]
+
+  if p2dist > 5250 then
+    colorScale = 0
+    p2TempColor = {colorScale, 0, 0}
+  elseif p2dist <= 5250 and p2dist > 5000 then
+    colorScale = (5250 - p2dist)/250
+    p2TempColor = {colorScale, 0, 0}
+  elseif p2dist <= 5000 and p2dist > 500 then
+    colorScale = (5000 - p2dist)/4500
+    p2TempColor = {1, colorScale, 0}
+  elseif p2dist <= 500 and p2dist > 0 then
+    colorScale = p2dist/500
+    p2TempColor = {colorScale, 1, 0}
   end
 end
+
+
+
+
+--[[
+10000 - 7500
+7500 - 5000
+5000 - 2500
+2500 - 1000
+1000 - 500
+500 - 250
+250 - 100
+100 - 50
+50 - 10
+10 - 0
+
+]]
+
 
 --Sets text X Location, Division factor, screen part, and text width
 --Division factor decides how many sections to divide screen into
