@@ -1,4 +1,4 @@
-numbersgame = require("numbersgame")
+
 
 function love.load()
   fontmain = love.graphics.newFont("goodtimesfont.ttf", 50)
@@ -172,8 +172,6 @@ function love.draw()
       love.graphics.print(p1Num, textXLoc(3, 1, p1Num), textYLoc(3, 3, p1Num)) --player 1 number
       love.graphics.print(p2Num, textXLoc(3, 3, p2Num), textYLoc(3, 3, p2Num)) --player 2 number
 
-
-
       love.graphics.setColor(1,1,1)
       local CIRCLE_OUTLINE_RADIUS = 37
       local CIRCLE_FILL_RADIUS = 35
@@ -202,7 +200,8 @@ function love.draw()
     elseif gameStart == false then
       love.graphics.setFont(fontmain)
       love.graphics.setColor(1,1,1)
-      love.graphics.print("Enter to Start. Escape To Quit", textXLoc(1,1,"Enter to Start. Escape To Quit"), 100)
+      love.graphics.print("Enter to Start.", textXLoc(1,1,"Enter to Start."), 100)
+      love.graphics.print("Escape to Quit.", textXLoc(1,1,"Escape to Quit."), 100 + getFontHeight("Enter to Start."))
     end
     if gameComplete == true then
       love.graphics.setFont(fontmain)
@@ -219,16 +218,14 @@ function love.keypressed(key)
       incrementP1 = incrementP1 - 1
     end
   elseif key =='d' then
-    d_down = true
     if incrementP1 < 3 then
       incrementP1 = incrementP1 + 1
     end
-
   elseif key == 'w' then
     w_down = true
     if incrementP1 == 1 then
       if p1Num + 1000 <= 10000 then
-      p1Num = p1Num + 1000
+        p1Num = p1Num + 1000
       end
     elseif incrementP1 == 2 then
       if p1Num + 100 <= 10000 then
@@ -240,10 +237,10 @@ function love.keypressed(key)
       end
     end
   elseif key == 's' then
-    s_down = true
+      s_down = true
     if incrementP1 == 1 then
       if p1Num - 1000 >= 0 then
-      p1Num = p1Num - 1000
+        p1Num = p1Num - 1000
       end
     elseif incrementP1 == 2 then
       if p1Num - 100 >= 0 then
@@ -254,7 +251,6 @@ function love.keypressed(key)
         p1Num = p1Num - 10
       end
     end
-
   elseif key =='left' then
     left_down = true
     if incrementP2 > 1 then
@@ -265,7 +261,6 @@ function love.keypressed(key)
     if incrementP2 < 3 then
       incrementP2 = incrementP2 + 1
     end
-
   elseif key == 'up' then
     up_down = true
     if incrementP2 == 1 then
@@ -431,7 +426,6 @@ end
 100 - 50
 50 - 10
 10 - 0
-
 ]]
 
 
