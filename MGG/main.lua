@@ -21,7 +21,6 @@ function love.load()
   p1colorScale = 0
   p1colorScale = 0
   quitGame = false
-  test = "nothing"
   gameStart = false
   gameComplete = false
   winner = "none"
@@ -86,7 +85,6 @@ function love.draw()
       love.graphics.print(P2SCORE_STRING, textXLoc(3, 3, P2SCORE_STRING), textYLoc(5, 2, P2SCORE_STRING)) --player 2 score
 
       love.graphics.setColor(1,1,1)
-
       RECT_WIDTH = '1000 100 10'
       RECT_ONE_X = shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 115)
       RECT_TWO_X = shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 115)
@@ -112,8 +110,6 @@ function love.draw()
         INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
       love.graphics.rectangle("line", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105) + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, (windowHeight/4) - 10),
         INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
-
-
 
       love.graphics.setFont(fontmain)
       love.graphics.setColor(1,1,1)
