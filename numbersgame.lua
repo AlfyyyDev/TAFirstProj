@@ -3,22 +3,26 @@ local gameComplete = false
 local targetNum = 0
 local p1Num = 5000
 local p2Num = 5000
-local p1dist = 0
-local p2dist = 0
+local p1dist = 5000
+local p2dist = 5000
 local p1colorScale = 0
-p2colorScale = 0
-p1TempColor = {0,0,0}
-p2TempColor = {0,0,0}
-incrementP1 = 2
-incrementP2 = 2
-round = 1
-p1score = 0
-p2score = 0
-winner = "none"
+local p2colorScale = 0
+local p1Color = {0,0,0}
+local p2Color = {0,0,0}
+local incrementP1 = 2
+local incrementP2 = 2
+local round = 1
+local p1score = 0
+local p2score = 0
+local winner = "none"
+local colorTimer1 = 0
+local colorTimer2 = 0
+local adding1 = true
+local adding2 = true
 
 local NumbersGame = {}
 
-function NumbersGame:update()
+function NumbersGame:update(dt)
   if gameStart == false and love.keyboard.isDown('return') then
     gameStart = true
     gameComplete = false
@@ -26,9 +30,13 @@ function NumbersGame:update()
     p1score = 0
     p2score = 0
     create_number()
-
   elseif gameStart == true then
       hotcold()
+
+      if p1dist <= 150 and p1dist > 0 then
+        veryclose(dt)
+      end
+
       if p1Num == targetNum then
         p1score = p1score + 1
         round = round + 1
@@ -58,14 +66,13 @@ end
 function NumbersGame:draw()
   if gameStart == true then
     ROUND_STRING = "Round " .. round
-    ROUND = "Round " .. round
     P1SCORE_STRING = "Score " .. p1score
     P2SCORE_STRING = "Score " .. p2score
     P1_STRING = "Player One"
     P2_STRING = "Player Two"
     love.graphics.setFont(fontmain)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.print(ROUND_STRING, textXLoc(1, 1, ROUND), textYLoc(14, 2, ROUND)) --round counter
+    love.graphics.print(ROUND_STRING, textXLoc(1, 1, ROUND_STRING), textYLoc(14, 2, ROUND_STRING)) --round counter
     love.graphics.print(P1_STRING, textXLoc(3, 1, P1_STRING), textYLoc(3, 1, P1_STRING)) --selected  player 1
     love.graphics.print(P2_STRING, textXLoc(3, 3, P2_STRING), textYLoc(3, 1, P2_STRING)) --selected player 2
     love.graphics.print(P1SCORE_STRING, textXLoc(3, 1, P1SCORE_STRING), textYLoc(5, 2, P1SCORE_STRING)) --player 1 score
@@ -82,17 +89,14 @@ function NumbersGame:draw()
     love.graphics.rectangle("line", RECT_ONE_X,
       shapeYLoc(1, 1, windowHeight/4), getFontWidth(RECT_WIDTH) + 115, windowHeight/4, 20, 20, 10000)
     love.graphics.setColor(1,0.6,0.2)
-    --left box 1
     love.graphics.rectangle("fill", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105), shapeYLoc(1, 1, (windowHeight/4) - 10),
       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
     love.graphics.rectangle("line", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105), shapeYLoc(1, 1, (windowHeight/4) - 10),
       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
-    --middle box 1
     love.graphics.rectangle("fill", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105) + INNER_RECT_WIDTH, shapeYLoc(1, 1, (windowHeight/4) - 10),
       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
     love.graphics.rectangle("line", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105) + INNER_RECT_WIDTH, shapeYLoc(1, 1, (windowHeight/4) - 10),
       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
-    --right box 1
     love.graphics.rectangle("fill", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105) + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, (windowHeight/4) - 10),
       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
     love.graphics.rectangle("line", shapeXLoc(3,1, getFontWidth(RECT_WIDTH) + 105) + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, (windowHeight/4) - 10),
@@ -105,17 +109,14 @@ function NumbersGame:draw()
     love.graphics.rectangle("line", RECT_TWO_X,
       shapeYLoc(1, 1, windowHeight/4), getFontWidth(RECT_WIDTH) + 115, windowHeight/4, 20, 20, 10000)
     love.graphics.setColor(1,0.6,0.2)
-    --left box 2
     love.graphics.rectangle("fill", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105), shapeYLoc(1, 1, (windowHeight/4) - 10),
       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
     love.graphics.rectangle("line", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105), shapeYLoc(1, 1, (windowHeight/4) - 10),
       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
-    --middle box 2
     love.graphics.rectangle("fill", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105)  + INNER_RECT_WIDTH, shapeYLoc(1, 1, (windowHeight/4) - 10),
       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
     love.graphics.rectangle("line", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105)  + INNER_RECT_WIDTH, shapeYLoc(1, 1, (windowHeight/4) - 10),
       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
-    --right box 2
     love.graphics.rectangle("fill", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105)  + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, (windowHeight/4) - 10),
       INNER_RECT_WIDTH - 10, (windowHeight/4) - 10, 20, 20, 10000)
     love.graphics.rectangle("line", shapeXLoc(3,3, getFontWidth(RECT_WIDTH) + 105)  + (INNER_RECT_WIDTH * 2), shapeYLoc(1, 1, (windowHeight/4) - 10),
@@ -172,13 +173,13 @@ function NumbersGame:draw()
     love.graphics.circle("line", shapeXLoc(6,6, (CIRCLE_OUTLINE_RADIUS*6)),
       shapeYLoc(9,9,(CIRCLE_OUTLINE_RADIUS)), CIRCLE_OUTLINE_RADIUS, CIRCLE_SEGMENT)
 
-    love.graphics.setColor(p1TempColor)
+    love.graphics.setColor(p1Color)
     love.graphics.circle("fill", shapeXLoc(6,2, (CIRCLE_OUTLINE_RADIUS*2)),
       shapeYLoc(9,9,(CIRCLE_OUTLINE_RADIUS)), CIRCLE_FILL_RADIUS, 10000)
     love.graphics.circle("line", shapeXLoc(6,2, (CIRCLE_OUTLINE_RADIUS*2)),
       shapeYLoc(9,9,(CIRCLE_OUTLINE_RADIUS)), CIRCLE_FILL_RADIUS, 10000)
 
-    love.graphics.setColor(p2TempColor)
+    love.graphics.setColor(p2Color)
     love.graphics.circle("fill", shapeXLoc(6,6, (CIRCLE_OUTLINE_RADIUS*6)),
       shapeYLoc(9,9,(CIRCLE_OUTLINE_RADIUS)), CIRCLE_FILL_RADIUS, 10000)
     love.graphics.circle("line", shapeXLoc(6,6, (CIRCLE_OUTLINE_RADIUS*6)),
@@ -302,33 +303,62 @@ function hotcold()
 
   if p1dist > 5250 then
     p1colorScale = 0
-    p1TempColor = {p1colorScale, 0, 0}
+    p1Color = {p1colorScale, 0, 0}
   elseif p1dist <= 5250 and p1dist > 5000 then
     p1colorScale = (5250 - p1dist)/250
-    p1TempColor = {p1colorScale, 0, 0}
+    p1Color = {p1colorScale, 0, 0}
   elseif p1dist <= 5000 and p1dist > 500 then
     p1colorScale = (5000 - p1dist)/4500
-    p1TempColor = {1, p1colorScale, 0}
+    p1Color = {1, p1colorScale, 0}
   elseif p1dist <= 500 and p1dist > 0 then
     p1colorScale = p1dist/500
-    p1TempColor = {p1colorScale, 1, 0}
+    p1Color = {p1colorScale, 1, 0}
   end
 
   if p2dist > 5250 then
     p2colorScale = 0
-    p2TempColor = {p2colorScale, 0, 0}
+    p2Color = {p2colorScale, 0, 0}
   elseif p2dist <= 5250 and p2dist > 5000 then
     p2colorScale = (5250 - p2dist)/250
-    p2TempColor = {p2colorScale, 0, 0}
+    p2Color = {p2colorScale, 0, 0}
   elseif p2dist <= 5000 and p2dist > 500 then
     p2colorScale = (5000 - p2dist)/4500
-    p2TempColor = {1, p2colorScale, 0}
+    p2Color = {1, p2colorScale, 0}
   elseif p2dist <= 500 and p2dist > 0 then
     p2colorScale = p2dist/500
-    p2TempColor = {p2colorScale, 1, 0}
+    p2Color = {p2colorScale, 1, 0}
   end
 end
 
+function veryclose(dt)
+  if adding1 == false then
+    colorTimer1 = colorTimer1 - dt * (1000/(p1dist + 50))
+    p1Color = {colorTimer1,1,0}
+  elseif adding1 == true then
+    colorTimer1 = colorTimer1 + dt * (1000/(p1dist + 50))
+    p1Color = {colorTimer1,1,0}
+  end
+  if colorTimer1 <= 0 then
+    adding1 = true
+  elseif colorTimer1 >= 1 then
+    adding1 = false
+  end
+
+  if adding2 == false then
+    colorTimer2 = colorTimer2 - dt * (1000/(p2dist + 50))
+    p2Color = {colorTimer2,1,0}
+  elseif adding2 == true then
+    colorTimer2 = colorTimer2 + dt * (1000/(p2dist + 50))
+    p2Color = {colorTimer2,1,0}
+  end
+  if colorTimer2 <= 0 then
+    adding2 = true
+  elseif colorTimer2 >= 1 then
+    adding2 = false
+  end
+end
+
+--Functional X Location for text, how many lines, which line
 function textXLoc(div, part, text)
   return (windowWidth * part)/(div + 1) - love.graphics.getFont():getWidth(text)/2
 end
