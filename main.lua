@@ -1,25 +1,29 @@
 
 
 function love.load()
-   love.window.setTitle("Number Game")
-   love.graphics.setNewFont(12)
-   love.graphics.setColor(0,0,0)
-   love.graphics.setBackgroundColor(255,255,255)
-   incrementP1 = 2
-   incrementP2 = 2
-   incrementTable = {1000, 100, 10}
-   p1Num = 5000
-   p2Num = 5000
-   round = 1
-   p1score = 0
-   p2score = 0
-   quitGame = false
-   test = "nothing"
-   gameStart = false
-   gameComplete = false
-   winner = "none"
-   p1TempColor = {0,0,0}
-   p2TempColor = {0,0,0}
+  fontmain = love.graphics.newFont("goodtimesfont.ttf", 50)
+  fontplayernums =  love.graphics.newFont("goodtimesfont.ttf", 90)
+  love.graphics.setFont(fontmain)
+  love.window.setTitle("Number Game")
+  love.window.setMode(1024,768)
+  love.graphics.setColor(0,0,0)
+  love.graphics.setBackgroundColor(1,0.4,0)
+  windowWidth, windowHeight = love.window.getMode()
+  incrementP1 = 2
+  incrementP2 = 2
+  incrementTable = {1000, 100, 10}
+  p1Num = 5000
+  p2Num = 5000
+  round = 1
+  p1score = 0
+  p2score = 0
+  quitGame = false
+  test = "nothing"
+  gameStart = false
+  gameComplete = false
+  winner = "none"
+  p1TempColor = {0,0,0}
+  p2TempColor = {0,0,0}
 end
 
 function love.update(dt)
@@ -64,30 +68,97 @@ end
 
 function love.draw()
     if gameStart == true then
+      ROUND_STRING = "Round " .. round
+      ROUND = "Round "
+      SCORE = "Score "
+      P1SCORE_STRING = "Score " .. p1score
+      P2SCORE_STRING = "Score " .. p2score
+      love.graphics.setFont(fontmain)
+      love.graphics.setColor(1, 1, 1)
+      love.graphics.print(ROUND_STRING, textXLoc(1, 1, ROUND), textYLoc(14, 2, ROUND)) --round counter
+      love.graphics.print('Player One', 300, 100) --selected  player 1
+      love.graphics.print('Player Two', 500, 100) --selected player 2
+      love.graphics.print(P1SCORE_STRING, textXLoc(3, 1, SCORE), textYLoc(5, 2, SCORE)) --player 1 score
+      love.graphics.print(P2SCORE_STRING, textXLoc(3, 3, SCORE), textYLoc(5, 2, SCORE)) --player 2 score
+
+
+      love.graphics.setColor(1,1,1)
+
+      RECT_WIDTH = '1000 100 10'
+      RECT_ONE_X = shapeXLoc(3,1, getFontWidth(RECT_WIDTH)+115)
+      RECT_TWO_X = shapeXLoc(3,3, getFontWidth(RECT_WIDTH)+115)
+      INNER_RECT_WIDTH = (getFontWidth(RECT_WIDTH) + 115)/3
+
+      love.graphics.rectangle("fill", RECT_ONE_X,
+       shapeYLoc(1, 1, windowHeight/4), getFontWidth(RECT_WIDTH) + 115, windowHeight/4, 20, 20, 10000)
+      love.graphics.rectangle("fill", RECT_TWO_X,
+       shapeYLoc(1, 1, windowHeight/4), getFontWidth(RECT_WIDTH) + 115, windowHeight/4, 20, 20, 10000)
+
       love.graphics.setColor(0,0,0)
-      love.graphics.setBackgroundColor(255,255,255)
-      love.graphics.print('Round ' .. round, 400, 50)
-      love.graphics.print(targetNum, 400, 300)
-      love.graphics.print(incrementTable[incrementP1], 300, 100)
-      love.graphics.print(incrementTable[incrementP2], 500, 100)
-      love.graphics.print(p1Num, 300, 200)
-      love.graphics.print(p2Num, 500, 200)
-      love.graphics.print('Score ' .. p1score, 200, 150)
-      love.graphics.print('Score ' .. p2score, 600, 150)
+       if incrementP1 == 1 then
+         love.graphics.rectangle("line", RECT_ONE_X, shapeYLoc(1, 1, windowHeight/4),
+          INNER_RECT_WIDTH, windowHeight/4, 20, 20, 10000)
+       elseif incrementP1 == 2 then
+         love.graphics.rectangle("line", RECT_ONE_X  + INNER_RECT_WIDTH, shapeYLoc(1, 1, windowHeight/4),
+          INNER_RECT_WIDTH, windowHeight/4, 20, 20, 10000)
+       elseif incrementP1 == 3 then
+         love.graphics.rectangle("line", RECT_ONE_X  + (INNER_RECT_WIDTH *2), shapeYLoc(1, 1, windowHeight/4),
+          INNER_RECT_WIDTH, windowHeight/4, 20, 20, 10000)
+       end
+
+       if incrementP2 == 1 then
+         love.graphics.rectangle("line", RECT_TWO_X, shapeYLoc(1, 1, windowHeight/4),
+          INNER_RECT_WIDTH, windowHeight/4, 20, 20, 10000)
+       elseif incrementP2 == 2 then
+         love.graphics.rectangle("line", RECT_TWO_X  + INNER_RECT_WIDTH, shapeYLoc(1, 1, windowHeight/4),
+          INNER_RECT_WIDTH, windowHeight/4, 20, 20, 10000)
+       elseif incrementP2 == 3 then
+         love.graphics.rectangle("line", RECT_TWO_X  + (INNER_RECT_WIDTH *2), shapeYLoc(1, 1, windowHeight/4),
+          INNER_RECT_WIDTH, windowHeight/4, 20, 20, 10000)
+       end
+
+      love.graphics.setColor(1,1,1)
+      love.graphics.setFont(fontplayernums)
+      love.graphics.print(p1Num, textXLoc(3, 1, p1Num), textYLoc(3, 3, p1Num)) --player 1 number
+      love.graphics.print(p2Num, textXLoc(3, 3, p2Num), textYLoc(3, 3, p2Num)) --player 2 number
+
+
+
+      love.graphics.setColor(1,1,1)
+      local CIRCLE_OUTLINE_RADIUS = 37
+      local CIRCLE_FILL_RADIUS = 35
+      local CIRCLE_SEGMENT = 10000
+      love.graphics.circle("fill", shapeXLoc(6,2, (CIRCLE_OUTLINE_RADIUS*2)),
+        shapeYLoc(9,9,(CIRCLE_OUTLINE_RADIUS)), CIRCLE_OUTLINE_RADIUS, CIRCLE_SEGMENT) --VVV proximity circles VVV
+      love.graphics.circle("fill", shapeXLoc(6,6, (CIRCLE_OUTLINE_RADIUS*6)),
+        shapeYLoc(9,9,(CIRCLE_OUTLINE_RADIUS)), CIRCLE_OUTLINE_RADIUS, CIRCLE_SEGMENT)
+      love.graphics.circle("line", shapeXLoc(6,2, (CIRCLE_OUTLINE_RADIUS*2)),
+        shapeYLoc(9,9,(CIRCLE_OUTLINE_RADIUS)), CIRCLE_OUTLINE_RADIUS, CIRCLE_SEGMENT)
+      love.graphics.circle("line", shapeXLoc(6,6, (CIRCLE_OUTLINE_RADIUS*6)),
+        shapeYLoc(9,9,(CIRCLE_OUTLINE_RADIUS)), CIRCLE_OUTLINE_RADIUS, CIRCLE_SEGMENT)
+
       love.graphics.setColor(p1TempColor)
-      love.graphics.circle("fill", 300, 300, 35, 20)
+      love.graphics.circle("fill", shapeXLoc(6,2, (CIRCLE_OUTLINE_RADIUS*2)),
+        shapeYLoc(9,9,(CIRCLE_OUTLINE_RADIUS)), CIRCLE_FILL_RADIUS, 10000)
+      love.graphics.circle("line", shapeXLoc(6,2, (CIRCLE_OUTLINE_RADIUS*2)),
+        shapeYLoc(9,9,(CIRCLE_OUTLINE_RADIUS)), CIRCLE_FILL_RADIUS, 10000)
+
       love.graphics.setColor(p2TempColor)
-      love.graphics.circle("fill", 500, 300, 35, 20)
+      love.graphics.circle("fill", shapeXLoc(6,6, (CIRCLE_OUTLINE_RADIUS*6)),
+        shapeYLoc(9,9,(CIRCLE_OUTLINE_RADIUS)), CIRCLE_FILL_RADIUS, 10000)
+      love.graphics.circle("line", shapeXLoc(6,6, (CIRCLE_OUTLINE_RADIUS*6)),
+        shapeYLoc(9,9,(CIRCLE_OUTLINE_RADIUS)), CIRCLE_FILL_RADIUS, 10000) ---^^^ proximity circles ^^^
 
     elseif gameStart == false then
-      love.graphics.setColor(0,0,0)
-      love.graphics.setBackgroundColor(255,255,255)
-      love.graphics.print("Enter to Start. Escape To Quit", 300, 100)
+      love.graphics.setFont(fontmain)
+      love.graphics.setColor(1,1,1)
+      love.graphics.print("Enter to Start. Escape To Quit", textXLoc(1,1,"Enter to Start. Escape To Quit"), 100)
     end
     if gameComplete == true then
-      love.graphics.setColor(0,0,0)
-      love.graphics.setBackgroundColor(255,255,255)
-      love.graphics.print(winner, 400, 300)
+      love.graphics.setFont(fontmain)
+      love.graphics.setColor(1,1,1)
+      love.graphics.print(targetNum, textXLoc(1,1,targetNum), textYLoc(2,2,targetNum)) --target number
+      love.graphics.print(winner, textXLoc(1,1,winner), 300)
     end
 end
 
@@ -202,6 +273,8 @@ function love.keyreleased(key)
   end
 end
 
+--Generates random target number for players to guess
+--Cannot equal 500 as that would break the game D:
 function create_number()
   math.randomseed(os.time())
   targetNum = math.random(1, 1000)
@@ -213,6 +286,10 @@ function create_number()
   targetNum = tonumber(targetNum)
 end
 
+--[[Hotcold function generates the hot cold measure color for the hotcold meters
+takes the random target number and subtracts the players numbers returning
+absolute value, then range is applied for color CHANGE TO CONSTANT ADJUST
+--]]
 function hotcold()
   p1dist = math.abs(targetNum - p1Num)
   p2dist = math.abs(targetNum - p2Num)
@@ -235,7 +312,7 @@ function hotcold()
     p1TempColor = {1,0,0.1}
   elseif p1dist <= 50 and p1dist > 10 then
     p1TempColor = {0.5,0,0.1}
-  elseif p1dist == 0 then
+  elseif p1dist <= 10 and p1dist >= 0 then
     p1TempColor = {0.4,1,0.1}
   end
 
@@ -260,6 +337,29 @@ function hotcold()
   elseif p2dist <= 10 and p2dist >= 0 then
     p2TempColor = {0.4,1,0.1}
   end
+end
+
+--Sets text X Location, Division factor, screen part, and text width
+--Division factor decides how many sections to divide screen into
+--Screen part decides which dividing line to place text
+function textXLoc(div, part, text)
+  return (windowWidth * part)/(div + 1) - love.graphics.getFont():getWidth(text)/2
+end
+
+function textYLoc(div, part, text)
+  return (windowHeight * part)/(div + 1) - love.graphics.getFont():getHeight(text)/2
+end
+
+function shapeXLoc(div, part, width)
+  return (windowWidth * part)/(div + 1) - width/2
+end
+
+function shapeYLoc(div, part, height)
+  return (windowHeight * part)/(div + 1) - height/2
+end
+
+function getFontWidth(text)
+  return love.graphics.getFont():getWidth(text)
 end
 
 
@@ -300,18 +400,3 @@ hiaosdhioasd
 hiaosdhioasd
 hiaosdhioasd
 ]]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---hiaosdhioasd
